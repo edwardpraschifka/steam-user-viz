@@ -56,23 +56,23 @@ def simulate_api(user_id):
 def test_bfs_depth_one():
     out = bfs("Alice", depth=1, process=simulate_api)
     assert len(out["Alice"]) == 3
-    assert(len(out.keys()) == 1)
+    assert len(out.keys()) == 1
     
 def test_bfs_depth_two():
     out = bfs("Alice", depth=2, process=simulate_api)
     assert len(out["Fred"]) == 2
     assert len(out["Jones"]) == 3
     assert len(out["Bob"]) == 2
-    assert(len(out.keys()) == 4)
+    assert len(out.keys()) == 4
 
 def test_bfs_depth_three():
     out = bfs("Alice", depth=3, process=simulate_api)
     assert len(out["Bill"]) == 1
     assert len(out["Dave"]) == 1
     assert len(out["Alex"]) == 3
-    assert(len(out.keys()) == 7)
+    assert len(out.keys()) == 7
 
 def test_bfs_depth_four():
     out = bfs("Alice", depth=4, process=simulate_api)
     assert len(out["Ron"]) == 1
-    assert(len(out.keys()) == 8)
+    assert len(out.keys()) == 8
