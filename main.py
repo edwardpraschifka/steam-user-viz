@@ -8,7 +8,10 @@ def get_friends(user):
     r = requests.get(url)
 
     if r.ok:
-        return r.json()
+        # transform output into format {user id : [friend_1 friend_2 ...]}
+        adj_list = r.json()['friendslist']
+        adj_list[user] = adj_list.pop('friends')
+        return adj_list
     else:
         raise RuntimeError("Error accessing Steam API, check your API key and user ID")
     
