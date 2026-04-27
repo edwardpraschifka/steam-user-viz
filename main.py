@@ -12,49 +12,56 @@ def get_friends(user_id):
     if r.ok:
         # current format is {'friendslist': {'friends': [friend_1, friend_2, ...]}}
         # extract [friend_1, friend_2, ...]
-        adj_list = r.json()['friendslist']['friends']
-        return adj_list
+        friends = r.json()['friendslist']['friends']
+
+        # each friend has format {steam_id, relationship, friend_since}
+        # extract steam_ids as a list
+        ids = {friend["steamid"] for friend in friends}
+        return ids
     else:
         raise RuntimeError(f"Error: {url} responded with code {r.status_code}")
 
-def bfs(user_id, depth=1, process=get_friends):
+def bfs(user_id, depth=1, get_friends_func=get_friends):
     """For a given user id and depth, return a dictionary of 
     at most {depth}-degree friends of the user"""
 
-    # dictionary mapping user id's to an array of friends
-    adj_list = {}
+    # dictionary mapping user id's to set of its friends
+    id_to_friends = {}
 
     # queue of user id's to process
-    friend_queue = queue.Queue()
+    id_queue = queue.Queue()
 
     # track depth
     friends_in_layer = 1
     friends_processed = 0
 
-    # track visited nodes
-    visited = {}
+    # set containing all enqueued ids
+    # (to avoid adding duplicates to queue)
+    enqueued = {}
 
-    friend_queue.put(user_id)
+    id_queue.put(user_id)
 
-    while depth > 0 and not friend_queue.empty():
-        current_id = friend_queue.get()
+    while depth > 0:
+        id = id_queue.get()
+        friends = {}
+        
 
         try:
-            adj_list[current_id] = process(current_id)
+            friends = get_friends_func(id)
+            id_to_friends[id] = friends
         except:
-            adj_list[current_id] = []
+            pass
 
-        for friend_dict in adj_list[current_id]:
-            if friend_dict['steamid'] not in adj_list and friend_dict['steamid'] not in visited:
-                friend_queue.put(friend_dict['steamid'])
-
-                visited[friend_dict['steamid']] = True
+        for friend_id in friends:
+            if friend_id not in id_to_friends and friend_id not in enqueued:
+                id_queue.put(friend_id)
+                enqueued[friend_id] = True
 
         friends_processed = friends_processed + 1
         
         if friends_processed == friends_in_layer:
-            friends_in_layer = friend_queue.qsize()
+            friends_in_layer = id_queue.qsize()
             depth = depth - 1
             friends_processed = 0
 
-    return adj_list
+    return id_to_friends
