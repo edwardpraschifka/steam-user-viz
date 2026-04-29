@@ -1,4 +1,5 @@
 import requests
+import re
 from urllib.error import HTTPError
 from config import STEAM_API_KEY, USER_ID
 
@@ -7,6 +8,9 @@ def get_friends(user_id):
 
     if not STEAM_API_KEY:
         raise ValueError("Missing Steam API key")
+    
+    if not re.fullmatch(r'\d{17}', str(user_id)):                                      
+      raise ValueError(f"Invalid Steam ID: {user_id}")
 
     url = (
         "https://api.steampowered.com/"

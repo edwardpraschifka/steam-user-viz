@@ -65,13 +65,8 @@ def test_no_friends(mock_get):
 
     assert result == {"is_private": False, "friends": []}
 
-@patch("main.requests.get")                                                   
-def test_invalid_user(mock_get):
-    mock_get.return_value.ok = True                                           
-    mock_get.return_value.status_code = 400
-    mock_get.return_value.raise_for_status.side_effect = requests.exceptions.HTTPError("400")
-                                                                            
-    with pytest.raises(RuntimeError):
+def test_invalid_user():                                                
+    with pytest.raises(ValueError):
         get_friends("invalid user id")
 
 @patch("main.requests.get")                                                   
