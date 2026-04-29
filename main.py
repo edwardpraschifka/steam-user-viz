@@ -1,20 +1,34 @@
 import requests
-from config import STEAM_API_KEY
+from urllib.error import HTTPError
+from config import STEAM_API_KEY, USER_ID
 
 def get_friends(user_id):
-    """For a given user id, return a list of the user's friends"""
+    """Returns a user's Steam friends"""
 
-    url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={STEAM_API_KEY}&steamid={user_id}&relationship=friend"
-    r = requests.get(url)
+    if not STEAM_API_KEY:
+        raise ValueError("Missing Steam API key")
 
-    if r.ok:
-        # current format is {'friendslist': {'friends': [friend_1, friend_2, ...]}}
-        # extract [friend_1, friend_2, ...]
-        friends = r.json()['friendslist']['friends']
+    url = (
+        "https://api.steampowered.com/"
+        "ISteamUser/GetFriendList/v0001/"
+        f"?key={STEAM_API_KEY}"
+        f"&steamid={user_id}"
+        "&relationship=friend"
+    )
 
-        # each friend has format {steam_id, relationship, friend_since}
-        # extract steam_ids as a list
-        ids = {friend["steamid"] for friend in friends}
-        return ids
-    else:
-        raise RuntimeError(f"Error: {url} responded with code {r.status_code}")
+    try:
+        response = requests.get(url, timeout=10)
+
+        # private user
+        if response.status_code == 401:
+                return {"is_private": True, "friends": []}
+        
+        response.raise_for_status()
+
+        data = response.json()
+        friends = data.get("friendslist", {}).get("friends", [])
+
+        return {"is_private": False, "friends": friends}
+    
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Steam API request failed: {e}")
