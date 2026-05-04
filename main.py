@@ -4,7 +4,11 @@ from urllib.error import HTTPError
 from config import STEAM_API_KEY, USER_ID
 
 def get_friends(user_id):
-    """Returns a user's Steam friends"""
+    """
+    Returns a dictionary with the following keys:
+    is_private: boolean
+    friends: list
+    """
 
     if not STEAM_API_KEY:
         raise ValueError("Missing Steam API key")
