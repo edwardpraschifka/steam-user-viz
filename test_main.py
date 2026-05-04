@@ -2,10 +2,10 @@ from unittest.mock import patch
 import requests
 import pytest
 import os
-from main import get_friends
-from config import USER_ID
+from app.services import get_friends
+from app.config import USER_ID
 
-@patch("main.requests.get")
+@patch("app.services.requests.get")
 def test_normal(mock_get):
 
     mock_get.return_value.json.return_value = {
@@ -43,7 +43,7 @@ def test_normal(mock_get):
         ]
     }
 
-@patch("main.requests.get")
+@patch("app.services.requests.get")
 def test_private(mock_get):
 
     mock_get.return_value.status_code = 401
@@ -52,7 +52,7 @@ def test_private(mock_get):
 
     assert result == {"is_private": True, "friends": []}
 
-@patch("main.requests.get")
+@patch("app.services.requests.get")
 def test_no_friends(mock_get):
 
     mock_get.return_value.json.return_value = {
@@ -69,7 +69,7 @@ def test_invalid_user():
     with pytest.raises(ValueError):
         get_friends("invalid user id")
 
-@patch("main.requests.get")                                                   
+@patch("app.services.requests.get")                                                   
 def test_bad_api_key(mock_get):
     mock_get.return_value.ok = True                                           
     mock_get.return_value.status_code = 400
@@ -78,7 +78,7 @@ def test_bad_api_key(mock_get):
     with pytest.raises(RuntimeError):
         get_friends(USER_ID)
 
-@patch("main.requests.get")
+@patch("app.services.requests.get")
 def test_timeout(mock_get):
     mock_get.side_effect = requests.exceptions.Timeout                        
 

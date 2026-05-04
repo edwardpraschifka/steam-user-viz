@@ -1,7 +1,7 @@
 import requests
 import re
 from urllib.error import HTTPError
-from config import STEAM_API_KEY, USER_ID
+from .config import STEAM_API_KEY, USER_ID
 
 def get_friends(user_id):
     """
