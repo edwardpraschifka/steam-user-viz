@@ -5,9 +5,10 @@ from .config import STEAM_API_KEY, USER_ID
 
 def get_friends(user_id):
     """
-    Returns a dictionary with the following keys:
-    is_private: boolean
-    friends: list
+    Takes a Steam ID and returns a 
+    dictionary with the following keys:
+    is_private: true if the user's friend list is private, false otherwise
+    friends: list of friend Steam IDs (empty if private)
     """
 
     if not STEAM_API_KEY:
