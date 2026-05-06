@@ -41,3 +41,26 @@ def get_friends(user_id):
     
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Steam API request failed: {e}")
+    
+def lookup_ids(ids):
+    """
+    Takes a list of Steam IDs and 
+    returns a dictionary mapping each ID to the 
+    corresponding username.
+    """
+    
+    url = (
+        "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
+        f"?key={STEAM_API_KEY}"
+        f"&steamids={','.join(ids)}"
+    )
+
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        players = data.get("response", {}).get("players", [])
+        return {player["steamid"]: player.get("personaname", "") for player in players}
+    
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Steam API request failed: {e}")
