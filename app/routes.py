@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import json
-from config import USER_ID
-from services import get_friends
+from .config import USER_ID
+from .services import get_friends
 
 app = Flask(__name__)
 
