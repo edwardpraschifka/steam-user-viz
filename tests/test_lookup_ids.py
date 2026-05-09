@@ -25,7 +25,13 @@ def test_lookup_ids(mock_get):
     result = lookup_ids(["76561197999528143", "76561198047699484"])
 
     assert result == {
-        "76561197999528143": "Steve",
-        "76561198047699484": "Jim"
+        "76561197999528143": {
+                "steamid": "76561197999528143",
+                "personaname": "Steve"
+        },
+        "76561198047699484": {
+                "steamid": "76561198047699484",
+                "personaname": "Jim"
+        }
     }
 

@@ -46,7 +46,7 @@ def lookup_ids(ids):
     """
     Takes a list of Steam IDs and 
     returns a dictionary mapping each ID to the 
-    corresponding username.
+    corresponding player summary.
     """
     
     url = (
@@ -60,7 +60,7 @@ def lookup_ids(ids):
         response.raise_for_status()
         data = response.json()
         players = data.get("response", {}).get("players", [])
-        return {player["steamid"]: player.get("personaname", "") for player in players}
+        return {player["steamid"]: player for player in players}
     
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Steam API request failed: {e}")
