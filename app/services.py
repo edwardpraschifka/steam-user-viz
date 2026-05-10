@@ -1,5 +1,6 @@
 import requests
 import re
+import time
 from urllib.error import HTTPError
 from .config import STEAM_API_KEY, USER_ID
 from .cache import friends_cache, player_cache
@@ -10,6 +11,20 @@ def validate_id(user_id):
     
     if not re.fullmatch(r'\d{17}', str(user_id)):                                      
       raise ValueError(f"Invalid Steam ID: {user_id}")
+    
+def get_with_backoff(url, timeout=10, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, timeout=timeout)
+            if response.status_code < 500:
+                return response
+            if attempt == max_retries - 1:
+                response.raise_for_status()
+        except requests.exceptions.Timeout:
+            if attempt == max_retries - 1:
+                raise
+        time.sleep(2 ** attempt)
+    return response
 
 def get_friends(id):
     """
@@ -37,7 +52,7 @@ def get_friends(id):
     )
 
     try:
-        response = requests.get(url, timeout=10)
+        response = get_with_backoff(url)
 
         # private user
         if response.status_code == 401:
@@ -81,7 +96,7 @@ def lookup_ids(ids):
         )
 
         try:
-            response = requests.get(url, timeout=10)
+            response = get_with_backoff(url)
             response.raise_for_status()
             data = response.json()
             players = data.get("response", {}).get("players", [])

@@ -7,10 +7,10 @@ from app.config import USER_ID
 
 @patch("app.cache.friends_cache.get", return_value=None)
 @patch("app.cache.friends_cache.set")
-@patch("app.services.requests.get")
-def test_miss(mock_requests_get, mock_cache_set, mock_cache_get):
+@patch("app.services.get_with_backoff")
+def test_miss(mock_get_backoff, mock_cache_set, mock_cache_get):
 
-    mock_requests_get.return_value.json.return_value = {
+    mock_get_backoff.return_value.json.return_value = {
     "friendslist": {
         "friends": [
             {
@@ -29,7 +29,7 @@ def test_miss(mock_requests_get, mock_cache_set, mock_cache_get):
 
     result = get_friends(USER_ID)
 
-    mock_requests_get.assert_called_once()
+    mock_get_backoff.assert_called_once()
 
     assert result == {
         "is_private": False,
@@ -49,10 +49,10 @@ def test_miss(mock_requests_get, mock_cache_set, mock_cache_get):
 
 @patch("app.cache.friends_cache.get", return_value=None)
 @patch("app.cache.friends_cache.set")
-@patch("app.services.requests.get")
-def test_private(mock_requests_get, mock_cache_set, mock_cache_get):
+@patch("app.services.get_with_backoff")
+def test_private(mock_get_backoff, mock_cache_set, mock_cache_get):
 
-    mock_requests_get.return_value.status_code = 401
+    mock_get_backoff.return_value.status_code = 401
 
     result = get_friends(USER_ID)
 
@@ -60,10 +60,10 @@ def test_private(mock_requests_get, mock_cache_set, mock_cache_get):
 
 @patch("app.cache.friends_cache.get", return_value=None)
 @patch("app.cache.friends_cache.set")
-@patch("app.services.requests.get")
-def test_no_friends(mock_requests_get, mock_cache_set, mock_cache_get):
+@patch("app.services.get_with_backoff")
+def test_no_friends(mock_get_backoff, mock_cache_set, mock_cache_get):
 
-    mock_requests_get.return_value.json.return_value = {
+    mock_get_backoff.return_value.json.return_value = {
     "friendslist": {
         "friends": []
     }
@@ -79,16 +79,16 @@ def test_invalid_user():
 
 @patch("app.cache.friends_cache.get", return_value=None)
 @patch("app.cache.friends_cache.set")
-@patch("app.services.requests.get")
-def test_timeout(mock_requests_get, mock_cache_set, mock_cache_get):
-    mock_requests_get.side_effect = requests.exceptions.Timeout
+@patch("app.services.get_with_backoff")
+def test_timeout(mock_get_backoff, mock_cache_set, mock_cache_get):
+    mock_get_backoff.side_effect = requests.exceptions.Timeout
 
     with pytest.raises(RuntimeError):
         get_friends(USER_ID)
 
 @patch("app.cache.friends_cache.get")
-@patch("app.services.requests.get")
-def test_hit(mock_requests_get, mock_cache_get):
+@patch("app.services.get_with_backoff")
+def test_hit(mock_get_backoff, mock_cache_get):
     mock_cache_get.side_effect = lambda id: {
         "is_private": False,
         "friends": [
@@ -122,4 +122,4 @@ def test_hit(mock_requests_get, mock_cache_get):
             }
         ]
     }
-    mock_requests_get.assert_not_called()
+    mock_get_backoff.assert_not_called()
