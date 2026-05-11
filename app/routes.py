@@ -8,7 +8,7 @@ from flask_limiter.util import get_remote_address
 import json
 
 from .metrics import get_metrics
-from .services import get_friends, lookup_ids
+from .services import get_friends, lookup_ids_bulk
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -29,7 +29,7 @@ def get_friends_api():
 
     user_id = request.args.get("user_id")
     friend_ids = get_friends(user_id)
-    id_to_summary = lookup_ids(friend_ids)
+    id_to_summary = lookup_ids_bulk(friend_ids)
     summaries = [id_to_summary[id] for id in friend_ids]
     return json.dumps(summaries)
 

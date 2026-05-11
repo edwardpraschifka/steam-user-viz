@@ -2,6 +2,9 @@ import requests
 import re
 import time
 from urllib.error import HTTPError
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from .config import STEAM_API_KEY, USER_ID
 from .cache import friends_cache, player_cache
 from . import metrics
@@ -110,3 +113,14 @@ def lookup_ids(ids):
             raise RuntimeError(f"Steam API request failed: {e}")
 
     return result
+
+def lookup_ids_bulk(ids, batch_size=100, max_workers=5):
+      """Split id list into sublists and calls lookup_ids on each"""
+      
+      batches = [ids[i:i+batch_size] for i in range(0, len(ids), batch_size)]
+      result = {}
+      with ThreadPoolExecutor(max_workers=max_workers) as executor:
+          futures = {executor.submit(lookup_ids, batch): batch for batch in batches}
+          for future in as_completed(futures):
+              result.update(future.result())
+      return result
