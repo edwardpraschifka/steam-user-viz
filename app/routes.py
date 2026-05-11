@@ -1,6 +1,12 @@
+from __future__ import annotations
+
 from flask import Flask, render_template, request
+
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 import json
-from .config import USER_ID
+
 from .metrics import get_metrics
 from .services import get_friends, lookup_ids
 
@@ -17,7 +23,8 @@ def get_friends_api():
     user_id = request.args.get("user_id")
     friend_ids = get_friends(user_id)
     id_to_summary = lookup_ids(friend_ids)
-    return [id_to_summary[id] for id in friend_ids]
+    summaries = [id_to_summary[id] for id in friend_ids]
+    return json.dumps(summaries)
 
 @app.route('/health', methods=['GET'])
 def health():
