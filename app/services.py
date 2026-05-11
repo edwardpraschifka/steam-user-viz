@@ -7,6 +7,8 @@ from .cache import friends_cache, player_cache
 import metrics
 
 def validate_id(user_id):
+    """Checks if ID exists and is valid"""
+
     if not user_id:
         raise ValueError("Missing Steam ID")
     
@@ -14,6 +16,8 @@ def validate_id(user_id):
       raise ValueError(f"Invalid Steam ID: {user_id}")
     
 def get_with_backoff(url, timeout=10, max_retries=3):
+    """Make request to URL with exponential backoff"""
+    
     for attempt in range(max_retries):
         try:
             response = requests.get(url, timeout=timeout)
@@ -30,12 +34,7 @@ def get_with_backoff(url, timeout=10, max_retries=3):
     return response
 
 def get_friends(id):
-    """
-    Takes a Steam ID and returns a
-    dictionary with the following keys:
-    is_private: true if the user's friend list is private, false otherwise
-    friends: list of friend Steam IDs (empty if private)
-    """
+    """Get list of user's friends"""
 
     result = {}
 

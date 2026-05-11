@@ -5,6 +5,7 @@ api_call_count = 0
 last_api_call = {}
 
 def get_metrics():
+    """Returns various metrics about currently running application """
     
     return {
         "time": time.time(),

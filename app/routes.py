@@ -1,10 +1,4 @@
-from __future__ import annotations
-
 from flask import Flask, render_template, request
-
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
-
 import json
 
 from .metrics import get_metrics
@@ -29,6 +23,7 @@ def get_friends_api():
 @app.route('/health', methods=['GET'])
 def health():
     """Returns metrics"""
+    
     metrics = get_metrics()
     return json.dumps(metrics)
     
