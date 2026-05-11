@@ -1,16 +1,29 @@
+from __future__ import annotations
+
 from flask import Flask, render_template, request
+
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 import json
 
 from .metrics import get_metrics
 from .services import get_friends, lookup_ids
 
 app = Flask(__name__)
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["60 per day", "50 per hour", "10 per minute"],
+    storage_uri="memory://",
+)
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 @app.route('/friends', methods=['GET'])
+@limiter.limit("10 per minute")
 def get_friends_api():
     """Returns information about a user's friends"""
 

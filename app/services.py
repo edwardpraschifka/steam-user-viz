@@ -4,7 +4,7 @@ import time
 from urllib.error import HTTPError
 from .config import STEAM_API_KEY, USER_ID
 from .cache import friends_cache, player_cache
-import metrics
+from . import metrics
 
 def validate_id(user_id):
     """Checks if ID exists and is valid"""

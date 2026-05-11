@@ -45,7 +45,7 @@ def test_health_zero_counts(client):
 
 
 def test_health_api_call_count(client):
-    metrics.api_call_count = 31
+    metrics.api_call_count = 3
     response = client.get("/health")
     data = json.loads(response.data)
     assert data["api_call_count"] == 3
