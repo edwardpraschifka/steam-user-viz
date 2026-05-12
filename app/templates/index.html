@@ -32,7 +32,7 @@
             const response = await fetch("/graph", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, session_id: sessionId })
+                body: JSON.stringify({ id, session_id: sessionId, skip_self: 0 })
             });
 
             const data = await response.json();

@@ -54,15 +54,14 @@ def update_graph():
     else:
         summaries = []
 
-        if skip_self:
-            self_summary = lookup_ids([id])
-            summaries.extend(self_summary)
+        if not skip_self:
+            self_summary = lookup_ids_bulk([id])
+            summaries.append(self_summary[id])
+            print(f"zy={summaries}")
 
         friend_ids = [friend["steamid"] for friend in profile["friends"]]
         id_to_summary = lookup_ids_bulk(friend_ids)
-        summaries.extend([id_to_summary[fid] for fid in friend_ids])
-
-        
+        summaries.extend([id_to_summary[fid] for fid in friend_ids])        
 
         for friend in summaries:
             graph.add_node(
