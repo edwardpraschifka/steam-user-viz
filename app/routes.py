@@ -53,8 +53,8 @@ def update_graph():
         
         result["success"] = True
         result["data"] = graph.serialize()
-
-    return result
+    
+    return json.dumps(result)
 
 @app.route('/health', methods=['GET'])
 def health():

@@ -1,0 +1,9 @@
+#window {
+    display:flex;
+    border:solid blue;
+}
+
+#left-panel {
+    border: solid red;
+    height:100vh;
+}

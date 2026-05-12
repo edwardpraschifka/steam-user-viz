@@ -3,18 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Submit</title>
+    <link rel="stylesheet" href="./static/styles.css"></link>
+    <script src="//cdn.jsdelivr.net/npm/3d-force-graph"></script>
 </head>
 <body>
-    <h1>Enter a Steam ID...</h1>
+    <div id="window">
+        <div id="left-panel">
+            <h1>Enter a Steam ID...</h1>
 
-    <label for="id"></label>
-    <input type="text" id="id"/>
+            <label for="id"></label>
+            <input type="text" id="id"/>
 
-    <button onclick="handleSubmit()">Submit</button>
+            <button id="submit-btn" onclick="handleSubmit()">Submit</button>
 
-    <p id="response-message"></p>
+            <p id="response-message"></p>
+        </div>
+        <div id="3d-graph"></div>
+    </div>
 
-    <script>
+    <script type="module">
+        import * as THREE from 'https://esm.sh/three';
+
         async function handleSubmit() {
             const id = document.getElementById("id").value;
 
@@ -29,10 +38,11 @@
             const msg = document.getElementById("response-message");
             if (response.ok) {
                 msg.textContent = data.message;
-            } else {
-                msg.textContent = "Error: " + data.error;
+                console.log(data)
             }
         }
+
+        document.getElementById("submit-btn").addEventListener("click", handleSubmit);
     </script>
 </body>
 </html>
