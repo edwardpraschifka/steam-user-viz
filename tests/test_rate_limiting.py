@@ -19,7 +19,7 @@ def client():
 @patch("app.routes.graph")
 def test_friends_within_limit(mock_graph, client):
     mock_graph.serialize.return_value = {}
-    response = client.post("/graph?id=76561197999528143")
+    response = client.post("/graph", json={"id": "76561197999528143"})
     assert response.status_code == 200
 
 
@@ -27,8 +27,8 @@ def test_friends_within_limit(mock_graph, client):
 def test_friends_exceeds_limit(mock_graph, client):
     mock_graph.serialize.return_value = {}
     for i in range(10):
-        client.post("/graph?id=76561197999528143")
+        client.post("/graph", json={"id": "76561197999528143"})
     
-    response = client.post("/graph?user_id=76561197999528143")
+    response = client.post("/graph", json={"id": "76561197999528143"})
     assert response.status_code == 429
 

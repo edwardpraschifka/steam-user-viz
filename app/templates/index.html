@@ -2,10 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steam User Visualizer</title>
+    <title>Submit</title>
 </head>
 <body>
-    
+    <h1>Enter a Steam ID...</h1>
+
+    <label for="id"></label>
+    <input type="text" id="id"/>
+
+    <button onclick="handleSubmit()">Submit</button>
+
+    <p id="response-message"></p>
+
+    <script>
+        async function handleSubmit() {
+            const id = document.getElementById("id").value;
+
+            const response = await fetch("/graph", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            });
+
+            const data = await response.json();
+
+            const msg = document.getElementById("response-message");
+            if (response.ok) {
+                msg.textContent = data.message;
+            } else {
+                msg.textContent = "Error: " + data.error;
+            }
+        }
+    </script>
 </body>
 </html>

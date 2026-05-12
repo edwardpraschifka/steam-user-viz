@@ -29,7 +29,8 @@ def update_graph():
     """Returns information about a user's friends"""
     
     result = {}
-    id = request.args.get("id")
+    data = request.get_json()
+    id = data.get("id")
     profile = get_friends(id) # = {is_private: True/False, friends: [id_1, id_2, ...]}
     if profile["is_private"]:
         result["success"] = False
