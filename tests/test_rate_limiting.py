@@ -16,19 +16,19 @@ def client():
         yield client
 
 
-@patch("app.routes.get_friends", return_value=[])
-@patch("app.routes.lookup_ids", return_value={})
-def test_friends_within_limit(mock_lookup, mock_friends, client):
-    response = client.get("/friends?user_id=76561197999528143")
+@patch("app.routes.graph")
+def test_friends_within_limit(mock_graph, client):
+    mock_graph.serialize.return_value = {}
+    response = client.post("/graph?id=76561197999528143")
     assert response.status_code == 200
 
 
-@patch("app.routes.get_friends", return_value=[])
-@patch("app.routes.lookup_ids", return_value={})
-def test_friends_exceeds_limit(mock_lookup, mock_friends, client):
+@patch("app.routes.graph")
+def test_friends_exceeds_limit(mock_graph, client):
+    mock_graph.serialize.return_value = {}
     for i in range(10):
-        client.get("/friends?user_id=76561197999528143")
+        client.post("/graph?id=76561197999528143")
     
-    response = client.get("/friends?user_id=76561197999528143")
+    response = client.post("/graph?user_id=76561197999528143")
     assert response.status_code == 429
 

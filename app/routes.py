@@ -7,6 +7,7 @@ from flask_limiter.util import get_remote_address
 
 import json
 
+from .graph import graph
 from .metrics import get_metrics
 from .services import get_friends, lookup_ids_bulk
 
@@ -22,16 +23,37 @@ limiter = Limiter(
 def home():
     return render_template("index.html")
 
-@app.route('/friends', methods=['GET'])
+@app.route('/graph', methods=['POST'])
 @limiter.limit("10 per minute")
-def get_friends_api():
+def update_graph():
     """Returns information about a user's friends"""
+    
+    result = {}
+    id = request.args.get("id")
+    profile = get_friends(id) # = {is_private: True/False, friends: [id_1, id_2, ...]}
+    if profile["is_private"]:
+        result["success"] = False
+        result["data"] = {}
 
-    user_id = request.args.get("user_id")
-    friend_ids = get_friends(user_id)
-    id_to_summary = lookup_ids_bulk(friend_ids)
-    summaries = [id_to_summary[id] for id in friend_ids]
-    return json.dumps(summaries)
+    else:
+        friend_ids = [friend["steamid"] for friend in profile["friends"]]
+        id_to_summary = lookup_ids_bulk(friend_ids)
+        summaries = [id_to_summary[fid] for fid in friend_ids]
+
+        for friend in summaries:
+            graph.add_node(
+                friend["steamid"], 
+                friend["personaname"], 
+                friend["profileurl"], 
+                friend["avatar"],
+            )
+            
+            graph.add_link(id, friend["steamid"])
+        
+        result["success"] = True
+        result["data"] = graph.serialize()
+
+    return result
 
 @app.route('/health', methods=['GET'])
 def health():
