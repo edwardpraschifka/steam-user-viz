@@ -27,4 +27,4 @@ class Graph:
     def serialize(self) -> dict:
         return asdict(self)
 
-graph = Graph()
+graphs: dict[str, Graph] = {}

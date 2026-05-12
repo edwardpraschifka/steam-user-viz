@@ -7,9 +7,9 @@ from flask_limiter.util import get_remote_address
 
 import json
 
-from .graph import graph
+from .graph import Graph, graphs
 from .metrics import get_metrics
-from .services import get_friends, lookup_ids_bulk
+from .services import get_friends, lookup_ids, lookup_ids_bulk
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -27,19 +27,42 @@ def home():
 @limiter.limit("10 per minute")
 def update_graph():
     """Returns information about a user's friends"""
-    
+
     result = {}
     data = request.get_json()
     id = data.get("id")
+    session_id = data.get("session_id")
+
+    if not session_id:
+        return json.dumps({"success": "False", "data": {}}), 400
+
+    if session_id not in graphs:
+        graphs[session_id] = Graph()
+    graph = graphs[session_id]
+
+    # to initialize the graph,
+    # fetch the profile summary
+    # of the queried user
+    skip_self = False if data.get("skip_self", 0) == 0 else True
+
+
     profile = get_friends(id) # = {is_private: True/False, friends: [id_1, id_2, ...]}
     if profile["is_private"]:
-        result["success"] = False
+        result["success"] = "False"
         result["data"] = {}
 
     else:
+        summaries = []
+
+        if skip_self:
+            self_summary = lookup_ids([id])
+            summaries.extend(self_summary)
+
         friend_ids = [friend["steamid"] for friend in profile["friends"]]
         id_to_summary = lookup_ids_bulk(friend_ids)
-        summaries = [id_to_summary[fid] for fid in friend_ids]
+        summaries.extend([id_to_summary[fid] for fid in friend_ids])
+
+        
 
         for friend in summaries:
             graph.add_node(

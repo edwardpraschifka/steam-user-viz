@@ -24,13 +24,15 @@
     <script type="module">
         import * as THREE from 'https://esm.sh/three';
 
+        const sessionId = crypto.randomUUID();
+
         async function handleSubmit() {
             const id = document.getElementById("id").value;
 
             const response = await fetch("/graph", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id })
+                body: JSON.stringify({ id, session_id: sessionId })
             });
 
             const data = await response.json();
