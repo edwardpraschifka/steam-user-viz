@@ -15,7 +15,7 @@ app = Flask(__name__)
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["60 per day", "50 per hour", "10 per minute"],
+    default_limits=["60 per hour", "10 per minute"],
     storage_uri="memory://",
 )
 
@@ -48,10 +48,11 @@ def update_graph():
 
     profile = get_friends(id) # = {is_private: True/False, friends: [id_1, id_2, ...]}
     if profile["is_private"]:
-        result["success"] = "False"
+        result["private"] = "True"
         result["data"] = {}
 
     else:
+        result["private"] = "False"
         summaries = []
 
         if not skip_self:
@@ -73,7 +74,6 @@ def update_graph():
             
             graph.add_link(id, friend["steamid"])
         
-        result["success"] = True
         result["data"] = graph.serialize()
     
     return json.dumps(result)

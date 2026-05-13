@@ -32,7 +32,7 @@ async function handleSubmit() {
 
     const gData = await response.json();
 
-    if (response.ok && gData["success"]) {
+    if (response.ok && gData["private"] == "False") {
         renderGraph(gData)
     }
 }
@@ -49,7 +49,7 @@ async function handleExpand(id) {
     console.log(gData)
     
     
-    if (response.ok && gData["success"]) {
+    if (response.ok && gData["private"] == "False") {
         renderGraph(gData)
     }
 }
