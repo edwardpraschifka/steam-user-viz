@@ -12,29 +12,17 @@ const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
                 return sprite;
             })
             .onNodeClick(node => {
-                console.log(node.id)
                 handleExpand(node.id)
             })
 
 
 async function renderGraph(gData) {
-    Graph.graphData(gData["data"])
+    Graph.graphData(gData)
 }
 
 async function handleSubmit() {
     const id = document.getElementById("id").value;
-
-    const response = await fetch("/graph", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, session_id: sessionId, skip_self: 0 })
-    });
-
-    const gData = await response.json();
-
-    if (response.ok && gData["private"] == "False") {
-        renderGraph(gData)
-    }
+    handleExpand(id)
 }
 
 async function handleExpand(id) {
@@ -50,7 +38,7 @@ async function handleExpand(id) {
     
     
     if (response.ok && gData["private"] == "False") {
-        renderGraph(gData)
+        renderGraph(gData["data"])
     }
 }
 
