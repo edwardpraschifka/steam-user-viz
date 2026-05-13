@@ -127,11 +127,10 @@ def lookup_ids_bulk(ids, batch_size=100, max_workers=5):
       return result
 
 def get_recently_played(id):
-    """Fetches stats on the user's played games"""
+    """Fetches stats on the user's recently played games"""
 
     result = {}
 
-    # Fetch to get recently played games
     url = (
             "https://api.steampowered.com/IPlayerService/"
             f"GetRecentlyPlayedGames/v0001/?key={STEAM_API_KEY}"
@@ -143,14 +142,34 @@ def get_recently_played(id):
         response.raise_for_status()
         data = response.json()
         print(f"data = {data}")
-
-        games = data.get("response", {}).get("games", [])
-
-        result = {"games": games}
+        games = data.get("response", {})
+        result = games
         
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Steam API request failed: {e}")
     
     return result
 
+def get_owned_games(id):
+    """Fetches stats on the user's owned games"""
+    
+    result = {}
+
+    url = (
+            "https://api.steampowered.com/IPlayerService/"
+            f"GetOwnedGames/v0001/?key={STEAM_API_KEY}"
+            f"&steamid={id}&format=json&include_appinfo=true"
+    )
+
+    try:
+        response = get_with_backoff(url)
+        response.raise_for_status()
+        data = response.json()
+        games = data.get("response", {})
+        result = games
+        
+    except requests.exceptions.RequestException as e:
+        raise RuntimeError(f"Steam API request failed: {e}")
+    
+    return result
 

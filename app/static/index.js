@@ -2,7 +2,7 @@ import * as THREE from 'https://esm.sh/three';
 
 const sessionId = crypto.randomUUID();
 
-const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
+const Graph = new ForceGraph3D(document.getElementById('graph'))
             .nodeThreeObject(({ avatarurl }) => {
                 const imgTexture = new THREE.TextureLoader().load(avatarurl);
                 imgTexture.colorSpace = THREE.SRGBColorSpace;
@@ -15,7 +15,7 @@ const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
                 handleExpand(node.id);
             })
             .onNodeRightClick(node => {
-                getGames(node.id);
+                openSidebar(node.id);
             })
 
 
@@ -45,15 +45,22 @@ async function handleExpand(id) {
     }
 }
 
-async function getGames(id) {
+async function getProfile(id) {
     const response = await fetch(`/games?id=${id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
     });
 
     const games = await response.json();
+    return games
+}
 
-    console.log(games)
+async function openSidebar(id) {
+    const profile = await getProfile(id);
+    console.log(profile)
+
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle('open');
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);

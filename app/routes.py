@@ -9,7 +9,7 @@ import json
 
 from .graph import Graph, graphs
 from .metrics import get_metrics
-from .services import get_friends, lookup_ids_bulk, get_recently_played
+from .services import get_friends, lookup_ids_bulk, get_recently_played, get_owned_games
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -81,8 +81,9 @@ def update_graph():
 @app.route('/games', methods=['GET'])
 def get_games():
     id = request.args.get("id")
-    games = get_recently_played(id)
-    return games
+    recent_games = get_recently_played(id)
+    owned_games = get_owned_games(id)
+    return {"recently_played": recent_games, "all": owned_games}
 
 
 @app.route('/health', methods=['GET'])
