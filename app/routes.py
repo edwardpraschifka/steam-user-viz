@@ -9,7 +9,7 @@ import json
 
 from .graph import Graph, graphs
 from .metrics import get_metrics
-from .services import get_friends, lookup_ids, lookup_ids_bulk
+from .services import get_friends, lookup_ids_bulk, get_recently_played
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -77,6 +77,13 @@ def update_graph():
         result["data"] = graph.serialize()
     
     return json.dumps(result)
+
+@app.route('/games', methods=['GET'])
+def get_games():
+    id = request.args.get("id")
+    games = get_recently_played(id)
+    return games
+
 
 @app.route('/health', methods=['GET'])
 def health():

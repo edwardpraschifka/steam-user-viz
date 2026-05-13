@@ -12,7 +12,10 @@ const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
                 return sprite;
             })
             .onNodeClick(node => {
-                handleExpand(node.id)
+                handleExpand(node.id);
+            })
+            .onNodeRightClick(node => {
+                getGames(node.id);
             })
 
 
@@ -40,6 +43,17 @@ async function handleExpand(id) {
     if (response.ok && gData["private"] == "False") {
         renderGraph(gData["data"])
     }
+}
+
+async function getGames(id) {
+    const response = await fetch(`/games?id=${id}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+
+    const games = await response.json();
+
+    console.log(games)
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);
