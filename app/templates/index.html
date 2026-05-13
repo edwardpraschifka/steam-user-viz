@@ -8,51 +8,14 @@
 </head>
 <body>
     <div id="window">
-        <div id="left-panel">
-            <h1>Enter a Steam ID...</h1>
-
-            <label for="id"></label>
+        <div id="sidebar"></div>
+        <div id="searchbar">
             <input type="text" id="id"/>
-
             <button id="submit-btn" onclick="handleSubmit()">Submit</button>
-
-            <p id="response-message"></p>
         </div>
         <div id="3d-graph"></div>
     </div>
 
-    <script type="module">
-        import * as THREE from 'https://esm.sh/three';
-
-        const sessionId = crypto.randomUUID();
-
-        async function handleSubmit() {
-            const id = document.getElementById("id").value;
-
-            const response = await fetch("/graph", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, session_id: sessionId, skip_self: 0 })
-            });
-
-            const gData = await response.json();
-            
-            if (response.ok && gData["success"]) {
-                console.log(gData["data"])
-                const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
-                    .nodeThreeObject(({ avatarurl }) => {
-                        const imgTexture = new THREE.TextureLoader().load(avatarurl);
-                        imgTexture.colorSpace = THREE.SRGBColorSpace;
-                        const material = new THREE.SpriteMaterial({ map: imgTexture });
-                        const sprite = new THREE.Sprite(material);
-                        sprite.scale.set(12, 12);
-                        return sprite;
-                    })
-                    .graphData(gData["data"]);
-            }
-        }
-
-        document.getElementById("submit-btn").addEventListener("click", handleSubmit);
-    </script>
+    <script type="module" src="./static/index.js"></script>
 </body>
 </html>

@@ -1,9 +1,25 @@
-#window {
-    display:flex;
-    border:solid blue;
+body {
+    margin: 0px;
+    background-color:black;
+
 }
 
-#left-panel {
-    border: solid red;
-    height:100vh;
+#window {
+
+}
+
+#sidebar {
+    border:solid red;
+    position: absolute;
+    flex-grow:1;
+}
+
+#searchbar {
+    width:fit-content;
+    margin:auto;
+}
+
+#3d-graph {
+    height: 100vh;
+    flex-grow:1;
 }
