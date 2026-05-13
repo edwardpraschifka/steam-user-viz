@@ -68,8 +68,9 @@ def get_friends(id):
             data = response.json()
             friends = data.get("friendslist", {}).get("friends", [])
             result = {"is_private": False, "friends": friends}
-        
-        friends_cache.set(id, result)
+
+        if not result["is_private"]:
+            friends_cache.set(id, result)
         return result
     
     except requests.exceptions.RequestException as e:
@@ -79,7 +80,7 @@ def lookup_ids(ids):
     """
     Takes a list of Steam IDs and
     returns a dictionary mapping each ID to the
-    corresponding player summary.
+    corresponding profile.
     """
 
     result = {}
@@ -124,3 +125,7 @@ def lookup_ids_bulk(ids, batch_size=100, max_workers=5):
           for future in as_completed(futures):
               result.update(future.result())
       return result
+
+
+
+
