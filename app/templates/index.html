@@ -35,12 +35,20 @@
                 body: JSON.stringify({ id, session_id: sessionId, skip_self: 0 })
             });
 
-            const data = await response.json();
-
-            const msg = document.getElementById("response-message");
-            if (response.ok) {
-                msg.textContent = data.message;
-                console.log(data)
+            const gData = await response.json();
+            
+            if (response.ok && gData["success"]) {
+                console.log(gData["data"])
+                const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
+                    .nodeThreeObject(({ avatarurl }) => {
+                        const imgTexture = new THREE.TextureLoader().load(avatarurl);
+                        imgTexture.colorSpace = THREE.SRGBColorSpace;
+                        const material = new THREE.SpriteMaterial({ map: imgTexture });
+                        const sprite = new THREE.Sprite(material);
+                        sprite.scale.set(12, 12);
+                        return sprite;
+                    })
+                    .graphData(gData["data"]);
             }
         }
 
