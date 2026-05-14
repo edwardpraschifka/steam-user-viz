@@ -28,20 +28,32 @@ async function handleSubmit() {
     handleExpand(id)
 }
 
+function loaderStart() {
+    document.getElementById("loader").classList.add("loading");
+}
+
+function loaderStop() {
+    document.getElementById("loader").classList.remove("loading");
+}
+
 async function handleExpand(id) {
-    const response = await fetch("/graph", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, session_id: sessionId, skip_self: 0 })
-    });
+    loaderStart();
+    try {
+        const response = await fetch("/graph", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, session_id: sessionId, skip_self: 0 })
+        });
 
-    const gData = await response.json();
+        const gData = await response.json();
 
-    console.log(gData)
-    
-    
-    if (response.ok && gData["private"] == "False") {
-        renderGraph(gData["data"])
+        console.log(gData)
+
+        if (response.ok && gData["private"] == "False") {
+            renderGraph(gData["data"])
+        }
+    } finally {
+        loaderStop();
     }
 }
 
@@ -56,7 +68,8 @@ async function getProfile(id) {
 }
 
 async function openSidebar(node) {
-    const profile = await getProfile(node.id);
+    loaderStart();
+    const profile = await getProfile(node.id).finally(loaderStop);
 
     const sidebar = document.getElementById("sidebar");
 
