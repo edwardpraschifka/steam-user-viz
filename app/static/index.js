@@ -64,3 +64,4 @@ async function openSidebar(id) {
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);
+Graph.onEngineStop(() => Graph.zoomToFit(400));
