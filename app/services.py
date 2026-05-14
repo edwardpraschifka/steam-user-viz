@@ -9,7 +9,7 @@ from .config import STEAM_API_KEY, USER_ID
 from .cache import friends_cache, player_cache
 from . import metrics
 
-def validate_id(user_id):
+def validate_id(user_id: str):
     """Checks if ID exists and is valid"""
 
     if not user_id:
@@ -18,7 +18,7 @@ def validate_id(user_id):
     if not re.fullmatch(r'\d{17}', str(user_id)):                                      
       raise ValueError(f"Invalid Steam ID: {user_id}")
     
-def get_with_backoff(url, timeout=10, max_retries=3):
+def get_with_backoff(url: str, timeout=10, max_retries=3):
     """Make request to URL with exponential backoff"""
     
     for attempt in range(max_retries):
@@ -26,7 +26,7 @@ def get_with_backoff(url, timeout=10, max_retries=3):
             response = requests.get(url, timeout=timeout)
             metrics.api_call_count = metrics.api_call_count + 1
             metrics.last_api_call = {"time": time.time(), "success": response.ok}
-            if response.status_code < 500:
+            if response.ok:
                 return response
             if attempt == max_retries - 1:
                 response.raise_for_status()
@@ -34,17 +34,18 @@ def get_with_backoff(url, timeout=10, max_retries=3):
             if attempt == max_retries - 1:
                 raise
         time.sleep(2 ** attempt)
-    return response
 
-def get_friends(id):
+def get_friends(id: str):
     """Get list of user's friends"""
 
     result = {}
 
+    # raise error if id is invalid
     validate_id(id)
-        
-    cache_entry = friends_cache.get(id)
 
+    # return cache entry for id,
+    # if it exists
+    cache_entry = friends_cache.get(id)
     if cache_entry is not None:
         return cache_entry
 
@@ -76,7 +77,7 @@ def get_friends(id):
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Steam API request failed: {e}")
     
-def lookup_ids(ids):
+def lookup_ids(ids: list):
     """
     Takes a list of Steam IDs and
     returns a dictionary mapping each ID to the
@@ -115,7 +116,7 @@ def lookup_ids(ids):
 
     return result
 
-def lookup_ids_bulk(ids, batch_size=100, max_workers=5):
+def lookup_ids_bulk(ids: list, batch_size=100, max_workers=5):
       """Split id list into sublists and calls lookup_ids on each"""
       
       batches = [ids[i:i+batch_size] for i in range(0, len(ids), batch_size)]
@@ -126,7 +127,7 @@ def lookup_ids_bulk(ids, batch_size=100, max_workers=5):
               result.update(future.result())
       return result
 
-def get_recently_played(id):
+def get_recently_played(id: str):
     """Fetches stats on the user's recently played games"""
 
     result = {}
@@ -141,7 +142,6 @@ def get_recently_played(id):
         response = get_with_backoff(url)
         response.raise_for_status()
         data = response.json()
-        print(f"data = {data}")
         games = data.get("response", {})
         result = games
         
@@ -150,7 +150,7 @@ def get_recently_played(id):
     
     return result
 
-def get_owned_games(id):
+def get_owned_games(id: str):
     """Fetches stats on the user's owned games"""
     
     result = {}
@@ -172,4 +172,3 @@ def get_owned_games(id):
         raise RuntimeError(f"Steam API request failed: {e}")
     
     return result
-
