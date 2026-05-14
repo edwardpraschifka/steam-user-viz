@@ -15,7 +15,7 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
                 handleExpand(node.id);
             })
             .onNodeRightClick(node => {
-                openSidebar(node.id);
+                openSidebar(node);
             })
 
 
@@ -55,12 +55,54 @@ async function getProfile(id) {
     return games
 }
 
-async function openSidebar(id) {
-    const profile = await getProfile(id);
-    console.log(profile)
+async function openSidebar(node) {
+    const profile = await getProfile(node.id);
 
     const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle('open');
+
+    const games = profile.all?.games ?? [];
+    const recentGames = profile.recently_played?.games ?? [];
+    const sortedGames = [...games].sort((a, b) => b.playtime_forever - a.playtime_forever);
+
+    const formatHours = (mins) => {
+        const h = Math.round(mins / 60);
+        return h === 1 ? '1 hr' : `${h} hrs`;
+    };
+
+    const iconUrl = (appid, hash) =>
+        `https://media.steampowered.com/steamcommunity/public/images/apps/${appid}/${hash}.jpg`;
+
+    const gameRow = (game) => `
+        <div class="sidebar-game">
+            <img class="sidebar-game-icon" src="${iconUrl(game.appid, game.img_icon_url)}" alt="">
+            <span class="sidebar-game-name">${game.name}</span>
+            <span class="sidebar-game-hours">${formatHours(game.playtime_forever)}</span>
+        </div>`;
+
+    sidebar.innerHTML = `
+        <div class="sidebar-header">
+            <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+        </div>
+        <div class="sidebar-user">
+            <img class="sidebar-avatar" src="${node.avatarurl}" alt="">
+            <div class="sidebar-user-info">
+                <a class="sidebar-username" href="${node.profileurl}" target="_blank">${node.name}</a>
+                <span class="sidebar-game-count">${games.length} games owned</span>
+            </div>
+        </div>
+        ${recentGames.length > 0 ? `
+            <div class="sidebar-section-label">Recently Played</div>
+            ${recentGames.map(gameRow).join('')}
+        ` : ''}
+        <div class="sidebar-section-label">All Games</div>
+        ${sortedGames.map(gameRow).join('')}
+    `;
+
+    sidebar.classList.add('open');
+}
+
+function closeSidebar() {
+    document.getElementById("sidebar").classList.remove('open');
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);
