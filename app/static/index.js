@@ -51,7 +51,10 @@ async function handleExpand(id) {
 
         if (response.ok && gData["private"] == "False") {
             renderGraph(gData["data"])
+        } else if (response.ok && gData["private"] == "True") {
+            showToast("This user's account is private.")
         }
+        
     } finally {
         loaderStop();
     }
@@ -68,8 +71,7 @@ async function getProfile(id) {
 }
 
 async function openSidebar(node) {
-    loaderStart();
-    const profile = await getProfile(node.id).finally(loaderStop);
+    const profile = await getProfile(node.id);
 
     const sidebar = document.getElementById("sidebar");
 
@@ -86,11 +88,11 @@ async function openSidebar(node) {
         `https://media.steampowered.com/steamcommunity/public/images/apps/${appid}/${hash}.jpg`;
 
     const gameRow = (game) => `
-        <a class="sidebar-game" href="https://store.steampowered.com/app/${game.appid}/" target="_blank">
+        <div class="sidebar-game">
             <img class="sidebar-game-icon" src="${iconUrl(game.appid, game.img_icon_url)}" alt="">
             <span class="sidebar-game-name">${game.name}</span>
             <span class="sidebar-game-hours">${formatHours(game.playtime_forever)}</span>
-        </a>`;
+        </div>`;
 
     sidebar.innerHTML = `
         <div class="sidebar-header">
@@ -114,8 +116,18 @@ async function openSidebar(node) {
     sidebar.classList.add('open');
 }
 
-function closeSidebar() {
+window.closeSidebar = function() {
     document.getElementById("sidebar").classList.remove('open');
+}
+
+let toastTimer = null;
+
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    document.getElementById("toast-message").textContent = message;
+    toast.classList.add("visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("visible"), 4000);
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);
