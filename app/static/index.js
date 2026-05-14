@@ -47,8 +47,6 @@ async function handleExpand(id) {
 
         const gData = await response.json();
 
-        console.log(gData)
-
         if (response.ok && gData["private"] == "False") {
             renderGraph(gData["data"])
         } else if (response.ok && gData["private"] == "True") {

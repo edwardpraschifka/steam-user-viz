@@ -58,7 +58,6 @@ def update_graph():
         if not skip_self:
             self_summary = lookup_ids_bulk([id])
             summaries.append(self_summary[id])
-            print(f"zy={summaries}")
 
         friend_ids = [friend["steamid"] for friend in profile["friends"]]
         id_to_summary = lookup_ids_bulk(friend_ids)
