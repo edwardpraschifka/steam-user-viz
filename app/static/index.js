@@ -86,11 +86,11 @@ async function openSidebar(node) {
         `https://media.steampowered.com/steamcommunity/public/images/apps/${appid}/${hash}.jpg`;
 
     const gameRow = (game) => `
-        <div class="sidebar-game">
+        <a class="sidebar-game" href="https://store.steampowered.com/app/${game.appid}/" target="_blank">
             <img class="sidebar-game-icon" src="${iconUrl(game.appid, game.img_icon_url)}" alt="">
             <span class="sidebar-game-name">${game.name}</span>
             <span class="sidebar-game-hours">${formatHours(game.playtime_forever)}</span>
-        </div>`;
+        </a>`;
 
     sidebar.innerHTML = `
         <div class="sidebar-header">
