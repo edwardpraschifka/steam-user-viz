@@ -141,9 +141,10 @@ def get_recently_played(id: str):
     try:
         response = get_with_backoff(url)
         response.raise_for_status()
-        data = response.json()
-        games = data.get("response", {})
-        result = games
+        data = response.json().get("response", {})
+        total_count = data.get("total_count", 0)
+        games = data.get("games", [])
+        result = {"total_count": total_count, "games": games}
         
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Steam API request failed: {e}")
@@ -164,9 +165,10 @@ def get_owned_games(id: str):
     try:
         response = get_with_backoff(url)
         response.raise_for_status()
-        data = response.json()
-        games = data.get("response", {})
-        result = games
+        data = response.json().get("response", {})
+        game_count = data.get("game_count", 0)
+        games = data.get("games", [])
+        result = {"game_count": game_count, "games": games}
         
     except requests.exceptions.RequestException as e:
         raise RuntimeError(f"Steam API request failed: {e}")
