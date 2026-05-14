@@ -26,7 +26,7 @@ def get_with_backoff(url: str, timeout=10, max_retries=3):
             response = requests.get(url, timeout=timeout)
             metrics.api_call_count = metrics.api_call_count + 1
             metrics.last_api_call = {"time": time.time(), "success": response.ok}
-            if response.ok:
+            if response.status_code < 500:
                 return response
             if attempt == max_retries - 1:
                 response.raise_for_status()
