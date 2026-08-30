@@ -61,7 +61,7 @@ def update_graph():
 
         friend_ids = [friend["steamid"] for friend in profile["friends"]]
         id_to_summary = lookup_ids_bulk(friend_ids)
-        summaries.extend([id_to_summary[fid] for fid in friend_ids])        
+        summaries.extend([id_to_summary[fid] for fid in friend_ids if fid in id_to_summary])
 
         for friend in summaries:
             graph.add_node(

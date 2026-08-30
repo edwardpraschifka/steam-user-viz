@@ -166,7 +166,7 @@ body {
     transform: translateX(-50%);
     z-index: 10;
     width: 100%;
-    max-width: 520px;
+    max-width: 600px;
     padding: 0 16px;
     box-sizing: border-box;
 }
@@ -251,7 +251,7 @@ kbd {
     color: rgba(255, 255, 255, 0.28);
 }
 
-#submit-btn {
+button {
     flex-shrink: 0;
     background: linear-gradient(135deg, #3a8fff 0%, #1e5fd4 100%);
     color: #fff;

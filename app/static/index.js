@@ -1,4 +1,5 @@
 import * as THREE from 'https://esm.sh/three';
+import { id_list } from './random_ids.js';
 
 const sessionId = crypto.randomUUID();
 
@@ -57,6 +58,12 @@ async function handleSubmit() {
         return;
     }
 
+    handleExpand(id)
+}
+
+async function handleRandom() {
+    const idx = Math.floor(Math.random() * id_list.length)
+    const id = id_list[idx]
     handleExpand(id)
 }
 
@@ -151,4 +158,5 @@ window.closeSidebar = function() {
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);
+document.getElementById("random-btn").addEventListener("click", handleRandom);
 Graph.onEngineStop(() => Graph.zoomToFit(400));
