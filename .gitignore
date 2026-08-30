@@ -2,3 +2,6 @@
 __pycache__/
 app/__pycache__/
 commit.txt
+package.json
+package-lock.json
+profile.json
