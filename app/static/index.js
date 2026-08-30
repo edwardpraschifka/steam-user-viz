@@ -151,7 +151,13 @@ async function getProfile(id) {
 }
 
 async function openSidebar(node) {
-    const profile = await getProfile(node.id);
+    loaderStart();
+    let profile;
+    try {
+        profile = await getProfile(node.id);
+    } finally {
+        loaderStop();
+    }
 
     const sidebar = document.getElementById("sidebar");
 
