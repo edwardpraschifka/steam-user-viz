@@ -3,7 +3,28 @@ import { id_list } from './random_ids.js';
 
 const sessionId = crypto.randomUUID();
 
+const MOUSE_LEFT_CLICK_ICON = `
+    <svg class="click-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a7 7 0 0 0-7 7v6a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7z"/>
+        <path d="M12 2a7 7 0 0 0-7 7v2h7z" fill="currentColor" stroke="none"/>
+        <line x1="12" y1="2" x2="12" y2="11"/>
+    </svg>`;
+
+const MOUSE_RIGHT_CLICK_ICON = `
+    <svg class="click-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a7 7 0 0 0-7 7v6a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7z"/>
+        <path d="M12 2a7 7 0 0 1 7 7v2h-7z" fill="currentColor" stroke="none"/>
+        <line x1="12" y1="2" x2="12" y2="11"/>
+    </svg>`;
+
 const Graph = new ForceGraph3D(document.getElementById('graph'))
+            .nodeLabel(({ name }) => `
+                <div class="node-tooltip">
+                    <div class="node-tooltip-name">${name}</div>
+                    <div class="node-tooltip-hint">${MOUSE_LEFT_CLICK_ICON} Expand</div>
+                    <div class="node-tooltip-hint">${MOUSE_RIGHT_CLICK_ICON} Profile</div>
+                </div>
+            `)
             .nodeThreeObject(({ avatarurl }) => {
                 const imgTexture = new THREE.TextureLoader().load(avatarurl);
                 imgTexture.colorSpace = THREE.SRGBColorSpace;
