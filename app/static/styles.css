@@ -169,14 +169,20 @@ body {
 
 .searchbar {
     position: absolute;
-    top: 36px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     z-index: 10;
     width: 100%;
     max-width: 600px;
     padding: 0 16px;
     box-sizing: border-box;
+    transition: top 0.5s ease, transform 0.5s ease;
+}
+
+.searchbar.docked {
+    top: 36px;
+    transform: translateX(-50%);
 }
 
 #instructions {

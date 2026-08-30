@@ -44,6 +44,10 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
 const seenNodeIds = new Set();
 
 async function renderGraph(gData) {
+    if (seenNodeIds.size === 0) {
+        document.querySelector(".searchbar").classList.add("docked");
+    }
+
     let unSeenIds = 0;
 
     for (const node of gData.nodes) {
