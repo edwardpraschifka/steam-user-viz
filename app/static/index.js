@@ -162,12 +162,16 @@ async function openSidebar(node) {
                 <span class="sidebar-game-count">${games.length} games owned</span>
             </div>
         </div>
-        ${recentGames.length > 0 ? `
-            <div class="sidebar-section-label">Recently Played</div>
-            ${recentGames.map(gameRow).join('')}
-        ` : ''}
-        <div class="sidebar-section-label">All Games</div>
-        ${sortedGames.map(gameRow).join('')}
+        ${games.length === 0 ? `
+            <div class="sidebar-empty">This user's profile is private, or they don't own any games.</div>
+        ` : `
+            ${recentGames.length > 0 ? `
+                <div class="sidebar-section-label">Recently Played</div>
+                ${recentGames.map(gameRow).join('')}
+            ` : ''}
+            <div class="sidebar-section-label">All Games</div>
+            ${sortedGames.map(gameRow).join('')}
+        `}
     `;
 
     sidebar.classList.add('open');

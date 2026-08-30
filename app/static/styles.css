@@ -159,6 +159,14 @@ body {
     flex-shrink: 0;
 }
 
+.sidebar-empty {
+    margin: 24px 16px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+}
+
 .searchbar {
     position: absolute;
     top: 36px;
