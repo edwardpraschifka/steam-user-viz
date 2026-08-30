@@ -39,6 +39,7 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
             .onNodeRightClick(node => {
                 openSidebar(node);
             })
+            .showNavInfo(false)
 
 
 const seenNodeIds = new Set();
