@@ -20,8 +20,20 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
             })
 
 
+const seenNodeIds = new Set();
+
 async function renderGraph(gData) {
+    let unSeenIds = 0;
+
+    for (const node of gData.nodes) {
+        if (!seenNodeIds.has(node.id)) {
+            seenNodeIds.add(node.id);
+            unSeenIds++;
+        }
+    }
+
     Graph.graphData(gData)
+    showToast(`Added ${unSeenIds} users to graph`)
 }
 
 function isValidSteamId(id) {
