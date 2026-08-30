@@ -89,6 +89,7 @@ Then open [http://localhost:5000](http://localhost:5000) in your browser.
 
 3D graph rendering powered by [3d-force-graph](https://github.com/vasturiano/3d-force-graph) by [Vasco Asturiano](https://github.com/vasturiano).
 
-[Screencast from 2026-08-30 20-47-12.webm](https://github.com/user-attachments/assets/3a43a025-4743-41ff-8e16-3322d9aa8545)
-<img width="1814" height="940" alt="add_user" src="https://github.com/user-attachments/assets/6d75639b-489f-43e0-a68b-a0d0cfa5b239" />
+https://github.com/user-attachments/assets/e0c21722-d542-4371-bc7b-b7aa81ee1479
+
+
 
