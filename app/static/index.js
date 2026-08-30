@@ -23,8 +23,40 @@ async function renderGraph(gData) {
     Graph.graphData(gData)
 }
 
+function isValidSteamId(id) {
+    return /^7656119\d{10}$/.test(id);
+}
+
+const TOAST_STYLE = {
+    background: "rgba(20, 22, 34, 0.9)",
+    color: "rgba(255, 255, 255, 0.85)",
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    fontSize: "13.5px",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderRadius: "12px",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+    backdropFilter: "blur(16px)",
+    WebkitBackdropFilter: "blur(16px)",
+};
+
+function showToast(message) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: TOAST_STYLE,
+    }).showToast();
+}
+
 async function handleSubmit() {
-    const id = document.getElementById("id").value;
+    const id = document.getElementById("id").value.trim();
+
+    if (!isValidSteamId(id)) {
+        showToast("Please enter a valid SteamID (e.g. 76561198202745727)");
+        return;
+    }
+
     handleExpand(id)
 }
 
@@ -116,16 +148,6 @@ async function openSidebar(node) {
 
 window.closeSidebar = function() {
     document.getElementById("sidebar").classList.remove('open');
-}
-
-let toastTimer = null;
-
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    document.getElementById("toast-message").textContent = message;
-    toast.classList.add("visible");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove("visible"), 4000);
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);
