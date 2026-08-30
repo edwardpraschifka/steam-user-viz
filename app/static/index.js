@@ -34,6 +34,11 @@ async function renderGraph(gData) {
 
     Graph.graphData(gData)
     showToast(`Added ${unSeenIds} users to graph`)
+    updateNodeCounter()
+}
+
+function updateNodeCounter() {
+    document.getElementById("node-counter").textContent = `${seenNodeIds.size} users in graph`;
 }
 
 function isValidSteamId(id) {
@@ -88,6 +93,7 @@ function loaderStop() {
 }
 
 async function handleExpand(id) {
+    openInstructions()
     loaderStart();
     try {
         const response = await fetch("/graph", {
@@ -169,6 +175,10 @@ async function openSidebar(node) {
 
 window.closeSidebar = function() {
     document.getElementById("sidebar").classList.remove('open');
+}
+
+function openInstructions() {
+    document.getElementById("instructions").classList.remove('hidden');
 }
 
 document.getElementById("submit-btn").addEventListener("click", handleSubmit);

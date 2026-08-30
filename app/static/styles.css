@@ -171,7 +171,7 @@ body {
     box-sizing: border-box;
 }
 
-.instructions {
+#instructions {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -179,6 +179,10 @@ body {
     gap: 6px 14px;
     margin-top: 10px;
     padding: 0 4px;
+}
+
+#instructions.hidden {
+    display: none;
 }
 
 .instruction-item {
