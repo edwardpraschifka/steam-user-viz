@@ -8,12 +8,63 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="//cdn.jsdelivr.net/npm/3d-force-graph"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="loader"></div>
     <div class="window">
         <div id="sidebar"></div>
         <div class="searchbar">
+            <div class="brand">
+                <svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Orbit">
+                    <defs>
+                        <linearGradient id="brandText" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#01cdfe"/>
+                            <stop offset="50%" stop-color="#b967ff"/>
+                            <stop offset="100%" stop-color="#ff2e88"/>
+                        </linearGradient>
+                        <filter id="brandGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur stdDeviation="6" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <g stroke="#b967ff" stroke-width="0.75" opacity="0.4">
+                        <line x1="20" y1="30" x2="90" y2="60"/>
+                        <line x1="90" y1="60" x2="15" y2="120"/>
+                        <line x1="50" y1="150" x2="130" y2="170"/>
+                        <line x1="160" y1="40" x2="230" y2="70"/>
+                        <line x1="230" y1="70" x2="260" y2="20"/>
+                        <line x1="200" y1="150" x2="245" y2="180"/>
+                        <line x1="260" y1="20" x2="300" y2="140"/>
+                        <line x1="300" y1="140" x2="330" y2="60"/>
+                        <line x1="330" y1="60" x2="350" y2="160"/>
+                        <line x1="370" y1="100" x2="330" y2="60"/>
+                        <line x1="130" y1="170" x2="200" y2="150"/>
+                    </g>
+                    <g fill="#fff">
+                        <circle cx="20" cy="30" r="2.2" opacity="0.7"/>
+                        <circle cx="50" cy="150" r="2.6" opacity="0.6"/>
+                        <circle cx="90" cy="60" r="1.8" opacity="0.7"/>
+                        <circle cx="130" cy="170" r="2.2" opacity="0.6"/>
+                        <circle cx="160" cy="40" r="3" opacity="0.75" fill="#01cdfe"/>
+                        <circle cx="200" cy="150" r="1.8" opacity="0.6"/>
+                        <circle cx="230" cy="70" r="2.6" opacity="0.7"/>
+                        <circle cx="260" cy="20" r="2.2" opacity="0.65"/>
+                        <circle cx="300" cy="140" r="2.6" opacity="0.7" fill="#ff6ec7"/>
+                        <circle cx="330" cy="60" r="1.8" opacity="0.65"/>
+                        <circle cx="350" cy="160" r="2.2" opacity="0.6"/>
+                        <circle cx="15" cy="120" r="1.8" opacity="0.6"/>
+                        <circle cx="370" cy="100" r="1.8" opacity="0.6"/>
+                        <circle cx="245" cy="180" r="1.8" opacity="0.55"/>
+                    </g>
+                    <text x="190" y="120" text-anchor="middle" font-family="Orbitron, sans-serif" font-weight="900" font-size="68" letter-spacing="1" fill="url(#brandText)" filter="url(#brandGlow)">ORBIT</text>
+                </svg>
+            </div>
             <div class="searchbar-inner">
                 <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input autofocus type="text" id="id" placeholder="Enter Steam ID (e.g. 76561198202745727)" autocomplete="off" spellcheck="false"/>
