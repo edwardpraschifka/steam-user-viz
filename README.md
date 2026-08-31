@@ -88,7 +88,7 @@ Get a key at [https://steamcommunity.com/dev/apikey](https://steamcommunity.com/
 
 Ensure you are in the `orbit` project folder, and run the following command on a port `$PORT` of your choosing.
 ```bash
-gunicorn --bind 127.0.0.1:$PORT routes:app
+gunicorn --bind 127.0.0.1:$PORT app.routes:app
 ```
 
 ## Usage
