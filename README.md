@@ -1,4 +1,4 @@
-# Steam Friend Graph Explorer
+# Orbit
 
 An interactive 3D visualizer for exploring Steam friend networks. Search any public Steam user to map their social graph, then click through to expand friends-of-friends and right-click nodes to inspect individual profiles and game libraries.
 
