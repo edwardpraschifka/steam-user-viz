@@ -43,6 +43,7 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
 
 
 const seenNodeIds = new Set();
+const expandedIds = new Set();
 
 async function renderGraph(gData, id, name=null) {
     if (seenNodeIds.size === 0) {
@@ -58,9 +59,29 @@ async function renderGraph(gData, id, name=null) {
         }
     }
 
+    // Graph.graphData() mutates link.source/target from id strings into
+    // node object references, so this has to run before that call.
+    const totalFriends = gData.links.filter(link => link.source === id).length;
+    const alreadyInGraph = Math.max(0, totalFriends - unSeenIds);
+    const who = name ? name : "user " + id;
+
     Graph.graphData(gData)
-    showToast(`Added ${name ? name : "user " + id}'s ${unSeenIds} friends to the graph`)
+    showToast(buildExpandToast(who, unSeenIds, alreadyInGraph))
     updateNodeCounter()
+}
+
+function buildExpandToast(who, unSeenIds, alreadyInGraph) {
+    if (unSeenIds === 0) {
+        return `All of ${who}'s friends are already in the graph`;
+    }
+
+    const friendWord = unSeenIds === 1 ? "friend" : "friends";
+
+    if (alreadyInGraph > 0) {
+        return `Added ${unSeenIds} new ${friendWord} (${alreadyInGraph} already in the graph)`;
+    }
+
+    return `Added ${who}'s ${unSeenIds} ${friendWord} to the graph`;
 }
 
 function updateNodeCounter() {
@@ -119,6 +140,11 @@ async function handleRandom() {
 }
 
 async function handleExpand(id, name=null) {
+    if (expandedIds.has(id)) {
+        showToast(`${name ? name : "This user"}'s friends are already in the graph`);
+        return;
+    }
+
     openInstructions()
     loaderStart();
     try {
@@ -131,6 +157,7 @@ async function handleExpand(id, name=null) {
         const gData = await response.json();
 
         if (response.ok && gData["private"] == "False") {
+            expandedIds.add(id);
             renderGraph(gData["data"], id, name)
         } else if (response.ok && gData["private"] == "True") {
             showToast("This user's account is private.")
