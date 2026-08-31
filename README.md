@@ -23,7 +23,7 @@ An interactive 3D visualizer for exploring Steam friend networks. Search any pub
 
 
 - **Profile sidebar** — right-click any node to view the user's avatar, username, and full game library with playtime
-<img width="339" height="271" alt="profile" src="https://github.com/user-attachments/assets/23987c96-7149-40c7-9ee7-c295ead392f9" />
+<img width="1263" height="696" alt="Screenshot from 2026-08-31 10-35-51" src="https://github.com/user-attachments/assets/16ab35f4-f73a-421f-b1cb-f2074ff45c1d" />
 
 
 
