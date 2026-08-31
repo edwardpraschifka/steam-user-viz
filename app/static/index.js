@@ -76,7 +76,7 @@ const TOAST_STYLE = {
     color: "rgba(255, 255, 255, 0.85)",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     fontSize: "13.5px",
-    border: "1px solid rgba(255, node.id255, 255, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
     borderRadius: "12px",
     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
     backdropFilter: "blur(16px)",
