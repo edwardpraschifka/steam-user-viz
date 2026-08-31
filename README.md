@@ -76,7 +76,7 @@ pip install -r requirements.txt
 
 **3. Set your Steam API key**
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root, and add your Steam API key.
 
 ```
 STEAM_API_KEY=your_key_here
@@ -86,8 +86,9 @@ Get a key at [https://steamcommunity.com/dev/apikey](https://steamcommunity.com/
 
 **4. Run the server**
 
+Ensure you are in the `orbit` project folder, and run the following command on a port `$PORT` of your choosing.
 ```bash
-flask --app app.run run
+gunicorn --bind 127.0.0.1:$PORT routes:app
 ```
 
 ## Usage
