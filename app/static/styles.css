@@ -285,7 +285,7 @@ button {
     margin-left: 10px;
 }
 
-#submit-btn:hover {
+button:hover {
     opacity: 0.88;
 }
 
