@@ -62,8 +62,8 @@ steam-user-viz/
 **1. Clone the repo**
 
 ```bash
-git clone https://github.com/edwardpraschifka/steam-user-viz.git
-cd steam-user-viz
+git clone https://github.com/edwardpraschifka/orbit.git
+cd orbit
 ```
 
 **2. Install dependencies**
