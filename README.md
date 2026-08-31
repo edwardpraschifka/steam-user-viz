@@ -90,8 +90,6 @@ Get a key at [https://steamcommunity.com/dev/apikey](https://steamcommunity.com/
 flask --app app.run run
 ```
 
-Then open [http://localhost:5000](http://localhost:5000) in your browser.
-
 ## Usage
 
 | Action | Result |
