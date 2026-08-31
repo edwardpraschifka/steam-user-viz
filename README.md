@@ -9,8 +9,26 @@ An interactive 3D visualizer for exploring Steam friend networks. Search any pub
 ## Features
 
 - **3D force-directed graph** — friend networks rendered as an interactive 3D graph
+<img width="800" height="418" alt="add_user_fast" src="https://github.com/user-attachments/assets/4fca9e74-5618-41b0-bd91-ba29c0951d37" />
+
+
+
+
+
 - **Expandable nodes** — left-click any node to load that user's friends into the graph
+<img width="800" height="610" alt="expand" src="https://github.com/user-attachments/assets/5eadd240-a5c6-48c1-9c4e-0aa5fafed275" />
+
+
+
+
+
 - **Profile sidebar** — right-click any node to view the user's avatar, username, and full game library with playtime
+<img width="1263" height="696" alt="Screenshot from 2026-08-31 10-35-51" src="https://github.com/user-attachments/assets/16ab35f4-f73a-421f-b1cb-f2074ff45c1d" />
+
+
+
+
+
 
 ## Tech Stack
 
@@ -88,3 +106,4 @@ Then open [http://localhost:5000](http://localhost:5000) in your browser.
 ## Credits
 
 3D graph rendering powered by [3d-force-graph](https://github.com/vasturiano/3d-force-graph) by [Vasco Asturiano](https://github.com/vasturiano).
+
