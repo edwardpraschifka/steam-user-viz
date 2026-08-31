@@ -21,7 +21,7 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
             .nodeLabel(({ name }) => `
                 <div class="node-tooltip">
                     <div class="node-tooltip-name">${name}</div>
-                    <div class="node-tooltip-hint">${MOUSE_LEFT_CLICK_ICON} Expand</div>
+                    <div class="node-tooltip-hint">${MOUSE_LEFT_CLICK_ICON} Import Friends</div>
                     <div class="node-tooltip-hint">${MOUSE_RIGHT_CLICK_ICON} Profile</div>
                 </div>
             `)
@@ -34,7 +34,7 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
                 return sprite;
             })
             .onNodeClick(node => {
-                handleExpand(node.id);
+                handleExpand(node.id, node.name);
             })
             .onNodeRightClick(node => {
                 openSidebar(node);
@@ -44,7 +44,7 @@ const Graph = new ForceGraph3D(document.getElementById('graph'))
 
 const seenNodeIds = new Set();
 
-async function renderGraph(gData) {
+async function renderGraph(gData, id, name=null) {
     if (seenNodeIds.size === 0) {
         document.querySelector(".searchbar").classList.add("docked");
     }
@@ -59,7 +59,7 @@ async function renderGraph(gData) {
     }
 
     Graph.graphData(gData)
-    showToast(`Added ${unSeenIds} users to graph`)
+    showToast(`Added ${name ? name : "user " + id}'s ${unSeenIds} friends to the graph`)
     updateNodeCounter()
 }
 
@@ -76,7 +76,7 @@ const TOAST_STYLE = {
     color: "rgba(255, 255, 255, 0.85)",
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     fontSize: "13.5px",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
+    border: "1px solid rgba(255, node.id255, 255, 0.1)",
     borderRadius: "12px",
     boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
     backdropFilter: "blur(16px)",
@@ -104,12 +104,6 @@ async function handleSubmit() {
     handleExpand(id)
 }
 
-async function handleRandom() {
-    const idx = Math.floor(Math.random() * id_list.length)
-    const id = id_list[idx]
-    handleExpand(id)
-}
-
 function loaderStart() {
     document.getElementById("loader").classList.add("loading");
 }
@@ -118,7 +112,13 @@ function loaderStop() {
     document.getElementById("loader").classList.remove("loading");
 }
 
-async function handleExpand(id) {
+async function handleRandom() {
+    const idx = Math.floor(Math.random() * id_list.length)
+    const id = id_list[idx]
+    handleExpand(id)
+}
+
+async function handleExpand(id, name=null) {
     openInstructions()
     loaderStart();
     try {
@@ -131,7 +131,7 @@ async function handleExpand(id) {
         const gData = await response.json();
 
         if (response.ok && gData["private"] == "False") {
-            renderGraph(gData["data"])
+            renderGraph(gData["data"], id, name)
         } else if (response.ok && gData["private"] == "True") {
             showToast("This user's account is private.")
         }
