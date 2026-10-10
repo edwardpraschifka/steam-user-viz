@@ -2,7 +2,7 @@
 
 An interactive 3D visualizer for exploring Steam friend networks. Search any public Steam user to map their social graph, then click through to expand friends-of-friends and right-click nodes to inspect individual profiles and game libraries.
 
-![Python](https://img.shields.io/badge/Python-3.x-blue) ![Flask](https://img.shields.io/badge/Flask-3.1-lightgrey) ![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.x-blue) ![Flask](https://img.shields.io/badge/Flask-3.1-lightgrey) ![License](https://img.shields.io/badge/license-MIT-green) ![Tests](https://github.com/edwardpraschifka/orbit/actions/workflows/tests.yml/badge.svg)
 
 ---
 
